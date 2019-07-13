@@ -13,13 +13,34 @@
 }
 .results {
     display:none;
+    height:40px;
+    width:40px;
+    border-radius: 20px;
+    margin:10px;
+}
+.circle-container {
+  display:flex;
+}
+.game{
+  display:flex;
+  justify-content: space-between;
+}
+.htp{
+width:500px
 }
 </style>
 
 <title>ice cream game</title>
 
 <body>
-Hi, there!
+  <div class="game">
+  <div>
+<div class="htp">  I'm thinking of a three digit number. Your goal is to guess it. 
+To start, type in a three digit number into the box. Press guess. Three circles will appear.
+They might be red, yellow, or green. A red circle means you got one number wrong. 
+A yellow circle means one of your numbers is in the 3 digit number, but in a different place.
+A green circle means you got the correct number, in the correct place. Just because a circle is first, that 
+doesn't mean that it is referring to the first number.  </div>
 <br />
 
 <input id="guess"/>
@@ -27,15 +48,22 @@ Hi, there!
 guess
 </button>
 <br />
-<div id="g1" class="results perfect">_</div>
-<div id="g2" class="results perfect">_</div>
-<div id="g3" class="results perfect">_</div>
-<div id="y1" class="results good">y</div>
-<div id="y2" class="results good">y</div>
-<div id="y3" class="results good">y</div>
-<div id="r1" class="results bad">r</div>
-<div id="r2" class="results bad">r</div>
-<div id="r3" class="results bad">r</div>
+
+<div class="circle-container"> 
+<div id="g1" class="results perfect"></div>
+<div id="g2" class="results perfect"></div>
+<div id="g3" class="results perfect"></div>
+<div id="y1" class="results good"></div>
+<div id="y2" class="results good"></div>
+<div id="y3" class="results good"></div>
+<div id="r1" class="results bad"></div>
+<div id="r2" class="results bad"></div>
+<div id="r3" class="results bad"></div>
+</div>
+</div>
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Strawberry_ice_cream_cone_%285076899310%29.jpg" />
+
+</div>
 
     <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
