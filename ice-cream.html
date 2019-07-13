@@ -1,0 +1,158 @@
+<html>
+
+<head>
+<style>
+.bad {
+    background-color:red;
+}
+.good {
+    background-color: yellow;
+}
+.perfect {
+    background-color: green;
+}
+.results {
+    display:none;
+}
+</style>
+
+<title>ice cream game</title>
+
+<body>
+Hi, there!
+<br />
+
+<input id="guess"/>
+<button onclick="tester()">
+guess
+</button>
+<br />
+<div id="g1" class="results perfect">_</div>
+<div id="g2" class="results perfect">_</div>
+<div id="g3" class="results perfect">_</div>
+<div id="y1" class="results good">y</div>
+<div id="y2" class="results good">y</div>
+<div id="y3" class="results good">y</div>
+<div id="r1" class="results bad">r</div>
+<div id="r2" class="results bad">r</div>
+<div id="r3" class="results bad">r</div>
+
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
+
+<script>
+
+
+  const solution = String(_.random(100, 1000));
+
+  function tester() {
+    let perfectCount = 0;
+    let goodCount = 0;
+    let badCount = 0;
+    const guess = $("#guess").val();
+    
+
+    console.log(guess)
+    if (guess.charAt(0) === solution.charAt(0)) {
+
+      perfectCount++;
+    } else if (guess.charAt(0) === solution.charAt(1) || guess.charAt(0) === solution.charAt(2)) {
+      goodCount++;
+    } else {
+      badCount++;
+    }
+    if (guess.charAt(1) === solution.charAt(1)) {
+      perfectCount++;
+    } else if (guess.charAt(1) === solution.charAt(0) || guess.charAt(1) === solution.charAt(2)) {
+      goodCount++;
+    } else {
+      badCount++;
+    }
+    if (guess.charAt(2) === solution.charAt(2)) {
+      perfectCount++;
+    } else if (guess.charAt(2) === solution.charAt(0) || guess.charAt(2) === solution.charAt(1)) {
+      goodCount++;
+    } else {
+      badCount++;
+    }
+    if (perfectCount === 3) {
+      console.log("You got it!");
+     
+    }
+    
+    if (perfectCount === 0) {
+      $('#g1').css('display', 'none');
+      $('#g2').css('display', 'none');
+      $('#g3').css('display', 'none');
+    }
+    if (perfectCount === 1) {
+      $('#g1').css('display', 'block');
+      $('#g2').css('display', 'none');
+      $('#g3').css('display', 'none');
+    }
+    if (perfectCount === 2) {
+      $('#g1').css('display', 'block');
+      $('#g2').css('display', 'block');
+      $('#g3').css('display', 'none');
+    }
+    if (perfectCount === 3) {
+      $('#g1').css('display', 'block');
+      $('#g2').css('display', 'block');
+      $('#g3').css('display', 'block');
+    } 
+    if (goodCount === 0) {
+      $('#y1').css('display', 'none');
+      $('#y2').css('display', 'none');
+      $('#y3').css('display', 'none');
+    }
+    if (goodCount === 1) {
+      $('#y1').css('display', 'block');
+      $('#y2').css('display', 'none');
+      $('#y3').css('display', 'none');
+    }
+    if (goodCount === 2) {
+      $('#y1').css('display', 'block');
+      $('#y2').css('display', 'block');
+      $('#y3').css('display', 'none');
+    }
+    if (goodCount === 3) {
+      $('#y1').css('display', 'block');
+      $('#y2').css('display', 'block');
+      $('#y3').css('display', 'block');
+    }
+    if (badCount === 0) {
+      $('#r1').css('display', 'none');
+      $('#r2').css('display', 'none');
+      $('#r3').css('display', 'none');
+    }
+    if (badCount === 1) {
+      $('#r1').css('display', 'block');
+      $('#r2').css('display', 'none');
+      $('#r3').css('display', 'none');
+    }
+    if (badCount === 2) {
+      $('#r1').css('display', 'block');
+      $('#r2').css('display', 'block');
+      $('#r3').css('display', 'none');
+    }
+    if (badCount === 3) {
+      $('#r1').css('display', 'block');
+      $('#r2').css('display', 'block');
+      $('#r3').css('display', 'block');
+    }
+   
+    $("#guess").focus();
+    $("#guess").select();
+  }
+
+
+
+
+
+</script>
+</body>
+</html>
