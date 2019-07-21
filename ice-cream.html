@@ -1,6 +1,10 @@
 <html>
 
 <head>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
 <style>
 .bad {
     background-color:red;
@@ -23,16 +27,18 @@
 }
 .game{
   display:flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 .htp{
-width:500px
+  width:500px;
+  font-family: Georgia;
+  font-size:20px;
 }
 </style>
 
 <title>ice cream game</title>
 
-<body>
+<body style="background-color: #87CEEB;">
   <div class="game">
   <div>
 <div class="htp">  I'm thinking of a three digit number. Your goal is to guess it. 
@@ -43,11 +49,13 @@ A green circle means you got the correct number, in the correct place. Just beca
 doesn't mean that it is referring to the first number.  </div>
 <br />
 
-<input id="guess"/>
-<button onclick="tester()">
-guess
-</button>
+<div class="form-inline">
+<input autofocus="true" id="guess" onkeyup="keyup(event)" class="form-control" />
+<button type="button" onclick="tester()" class="btn btn-primary">Guess</button>
+</div>
 <br />
+
+
 
 <div class="circle-container"> 
 <div id="g1" class="results perfect"></div>
@@ -60,29 +68,122 @@ guess
 <div id="r2" class="results bad"></div>
 <div id="r3" class="results bad"></div>
 </div>
+
+    <div id="body">
+      <div id="footer">
+    
+      </div>
+    </div>
+
+
 </div>
 <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Strawberry_ice_cream_cone_%285076899310%29.jpg" />
 
 </div>
 
-    <script
+<script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
 
+<script type="text/javascript">
+
+  function confetti() {
+    var w = 1280,
+        h = 800;
+
+    var nodes = d3.range(200).map(function() { return {radius: Math.random() * 12 + 4}; }),
+        color = d3.scale.category10();
+
+    var force = d3.layout.force()
+        .gravity(0.05)
+        .charge(function(d, i) { return i ? 0 : -2000; })
+        .nodes(nodes)
+        .size([w, h]);
+
+    var root = nodes[0];
+    root.radius = 0;
+    root.fixed = true;
+
+    force.start();
+
+    var svg = d3.select("#body").append("svg:svg")
+        .attr("width", w)
+        .attr("height", h);
+
+    svg.selectAll("circle")
+        .data(nodes.slice(1))
+      .enter().append("svg:circle")
+        .attr("r", function(d) { return d.radius - 2; })
+        .style("fill", function(d, i) { return color(i % 3); });
+
+    force.on("tick", function(e) {
+      var q = d3.geom.quadtree(nodes),
+          i = 0,
+          n = nodes.length;
+
+      while (++i < n) {
+        q.visit(collide(nodes[i]));
+      }
+
+      svg.selectAll("circle")
+          .attr("cx", function(d) { return d.x; })
+          .attr("cy", function(d) { return d.y; });
+    });
+
+    svg.on("mousemove", function() {
+      var p1 = d3.svg.mouse(this);
+      root.px = p1[0];
+      root.py = p1[1];
+      force.resume();
+    });
+
+    function collide(node) {
+      var r = node.radius + 16,
+          nx1 = node.x - r,
+          nx2 = node.x + r,
+          ny1 = node.y - r,
+          ny2 = node.y + r;
+      return function(quad, x1, y1, x2, y2) {
+        if (quad.point && (quad.point !== node)) {
+          var x = node.x - quad.point.x,
+              y = node.y - quad.point.y,
+              l = Math.sqrt(x * x + y * y),
+              r = node.radius + quad.point.radius;
+          if (l < r) {
+            l = (l - r) / l * .5;
+            node.x -= x *= l;
+            node.y -= y *= l;
+            quad.point.x += x;
+            quad.point.y += y;
+          }
+        }
+        return x1 > nx2
+            || x2 < nx1
+            || y1 > ny2
+            || y2 < ny1;
+      };
+    }
+  }
+</script>
+
 <script>
-
-
   const solution = String(_.random(100, 1000));
 
+function keyup(event) {
+  if (event.code === "Enter") {
+    tester();
+  }
+}
+
+  console.log(solution);
   function tester() {
     let perfectCount = 0;
     let goodCount = 0;
     let badCount = 0;
     const guess = $("#guess").val();
-    
 
     console.log(guess)
     if (guess.charAt(0) === solution.charAt(0)) {
@@ -108,8 +209,7 @@ guess
       badCount++;
     }
     if (perfectCount === 3) {
-      console.log("You got it!");
-     
+      confetti();    
     }
     
     if (perfectCount === 0) {
